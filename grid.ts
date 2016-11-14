@@ -1,49 +1,87 @@
-var EventEmitter = require('events').EventEmitter,
-    util = require('util');
+import events = require('events');
+var EventEmitter = events.EventEmitter;
 
-class Item {
+class Item extends EventEmitter{
     public segment;
 
-    constructor(public x, public y) {
-    }
+    constructor(public id, public x, public y) {super();}
 
     update (x, y){
         this.x = x;
         this.y = y;
+        if(this.x < this.segment.x || this.x >= this.segment.xw || this.y < this.segment.y || this.y >= this.segment.yh){
+            this.segment.update(this);
+            this.emit('update');
+        }
+
+    }
+    plain(){
+        return {
+            x : this.x,
+            y : this.y,
+            id : this.id
+        }
     }
 }
 
-class Segment {
+class Segment extends EventEmitter{
     public items = [];
-    public grid;
 
-    constructor(public id, public x, public y, public w, public h) {
-    }
+    constructor(
+        public grid: Grid,
+        public id,
+        public x,
+        public y,
+        public w,
+        public h,
+        public xw,
+        public yh
+    ) {super();}
 
     update (item: Item){
+        this.emit('before update');
+        this.items.splice(this.items.indexOf(item), 1);
+        this.grid.update(item);
+        this.emit('update');
+    }
+    createItem (x, y){
 
+    }
+    getAllItemsPlain (){
+        return this.items.map(v => v.plain());
+    }
+    getItemsExcept (id){
+        return this.items.map(v => v.plain()).filter(v => v.id != id);
+    }
+    emitToAllItems (event, data){
+        this.items.forEach(v => v.emit(event, data));
+    }
+    emitToAllItemsExcept(item: Item, event, data){
+        this.items.filter(v => v.id !== item.id).forEach(v => v.emit(event, data));
     }
 }
 
 class Grid extends EventEmitter {
     private segments = [];
+    private items = [];
 
     init (w, h, gridSize) {
         for (var i = 0; i < w; i += gridSize.w)
             for (var j = 0; j < h; j += gridSize.h)
-                this.createSegment(i, j, gridSize.w, gridSize.h);
+                this.createSegment(i, j, gridSize.w, gridSize.h, i + gridSize.w, j + gridSize.h);
     }
     createItem (x, y) {
-        var item = new Item(x, y),
-            segment = this.getSegmentByXY(x, y);
+        var segment = this.getSegmentByXY(x, y),
+            item = new Item(this.items.length, x, y);
 
-        segment.items.push(item);
         item.segment = segment;
+        this.items.push(item);
+        segment.items.push(item);
 
         return item;
     }
-    createSegment (x, y, w, h) {
-        var segment = new Segment(this.segments.length, x, y, w, h);
+    createSegment (x, y, w, h, xw, yh) {
+        var segment = new Segment(this, this.segments.length, x, y, w, h, xw, yh);
         this.segments.push(segment);
     }
     getSegmentByXY (x, y) {
@@ -51,16 +89,19 @@ class Grid extends EventEmitter {
         for (var i = 0; i < this.segments.length; i++) {
             segment = this.segments[i];
 
-            if (segment.x <= x && segment.x + segment.w > x && segment.y <= y && segment.y + segment.h > y)
+            if (segment.x <= x && segment.xw > x && segment.y <= y && segment.yh > y)
                 return segment;
         }
 
     }
+
+    update (item: Item){
+        this.emit('before update');
+        var segment = this.getSegmentByXY(item.x, item.y)
+        segment.items.push(item);
+        item.segment = segment;
+        item.segment.emit('update');
+        this.emit('update');
+    }
 }
-
-
-var grid = new Grid;
-grid.init(2000, 2000, {w: 100, h: 100});
-
-var item = grid.createItem(300, 300);
-console.log(item);
+module.exports = Grid;

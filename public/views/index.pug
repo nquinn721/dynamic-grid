@@ -1,1 +1,52 @@
+script(src="/socket.io/socket.io.js")
+script(
+    src="https://code.jquery.com/jquery-2.2.4.min.js"
+    integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+    crossorigin="anonymous" )
+style.
+    canvas {
+        width: 600px;
+        height: 300px;
+        border: 1px solid black;
+    }
 h1 Welcome
+canvas#game
+script.
+    var canvas = document.getElementById("game");
+    var ctx = canvas.getContext("2d");
+    var socket = io();
+    var player = {};
+    var items = [];
+    canvas.width = 600;
+    canvas.height = 300;
+    socket.on('player', function (item) {
+        player = item;
+    });
+    socket.on('allItems', function (i) {
+        items = i;
+    });
+    socket.on('moveItem', function (item) {
+        console.log('move item');
+        for(var i = 0; i < items.length; i++)
+            if(items[i].id === item.id)items[i] = item;
+    });
+    $(document).on('keydown', function (e) {
+        if(e.keyCode === 83) // down
+                socket.emit('moveItem', 'down');
+        if(e.keyCode  === 87)
+                socket.emit('moveItem', 'up');
+        if(e.keyCode === 65)
+                socket.emit('moveItem', 'left');
+        if(e.keyCode === 68)
+                socket.emit('moveItem', 'right');
+    });
+
+    setInterval(function () {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(player.x, player.y, 10, 10);
+
+        for(var i = 0; i < items.length; i++)
+            ctx.fillRect(items[i].x, items[i].y, 10, 10);
+    }, 20);
+
+
