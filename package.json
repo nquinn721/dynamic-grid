@@ -1,8 +1,7 @@
 {
   "name": "dynamicgrid",
   "version": "0.1.0",
-  "description": "",
-  "main": "app.js",
+  "main": "dist/grid.js",
   "dependencies": {
     "express": "^4.14.0",
     "pug": "^2.0.0-beta6",
@@ -10,11 +9,28 @@
   },
   "devDependencies": {
     "@types/node": "^6.0.46",
-    "typescript": "^2.0.8"
+    "mocha": "^3.1.2",
+    "mocha-typescript": "^1.0.11",
+    "ts-node": "^1.7.0",
+    "typescript": "^2.0.8",
+    "typescript-require": "^0.2.9-1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha",
+    "dev-test-watch": "mocha-typescript-watch"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nquinn721/dynamic-grid.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nquinn721/dynamic-grid/issues"
+  },
+  "homepage": "https://github.com/nquinn721/dynamic-grid#readme",
+  "description": ""
 }
