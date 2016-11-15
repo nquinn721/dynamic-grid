@@ -9,7 +9,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'public/views'));
 
-var Grid = require('./grid');
+var Grid = require('./dist/grid').Grid;
+console.log(Grid);
 // console.log(item);
 app.get('/', function (req, res) {
     res.render('index');
