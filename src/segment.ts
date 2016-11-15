@@ -6,7 +6,7 @@ export class Segment extends EventEmitter{
     public items = [];
 
     constructor(
-        public grid: Grid,
+        public grid,
         public id,
         public x,
         public y,

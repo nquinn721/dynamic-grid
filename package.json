@@ -16,7 +16,7 @@
     "typescript-require": "^0.2.9-1"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --compilers js:babel-core/register",
     "dev-test-watch": "mocha-typescript-watch"
   },
   "author": "",
