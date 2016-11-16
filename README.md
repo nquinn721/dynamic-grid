@@ -2,7 +2,7 @@
 
 This is a dynamic grid for gaming.
 
-    var Grid = require('./dist/grid').Grid;
+    var Grid = require('dynamicgrid').Grid;
     var grid = new Grid;
     
     // initialize grid 
