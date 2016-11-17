@@ -45,4 +45,5 @@ export class Grid extends EventEmitter {
         this.emit('update');
     }
 }
+module.exports = Grid;
 
