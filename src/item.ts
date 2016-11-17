@@ -14,6 +14,9 @@ export class Item extends EventEmitter{
         }
 
     }
+    getOtherItemsInSegment (){
+        return this.segment.getItemsExcept(this.id);
+    }
     plain(){
         return {
             x : this.x,
