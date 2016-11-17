@@ -5,7 +5,7 @@ This is a dynamic grid for gaming.
 
 ```javascript
 var Grid = require('dynamicgrid').Grid;
-    var grid = new Grid;
+var grid = new Grid;
 
 // initialize grid 
 grid.init(w, h, segment); // Segment is {w : w, h : h}
