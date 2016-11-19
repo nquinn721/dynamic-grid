@@ -8,7 +8,7 @@ describe("Grid", function() {
         this.grid = new Grid.Grid;
         this.grid.init(2000, 2000, {w: 100, h: 100});
         this.item = this.grid.createItem(10, 10);
-
+        this.item1 = this.grid.createItem(100, 100);
     });
 
     it("Should create an item", function () {
@@ -35,5 +35,10 @@ describe("Grid", function() {
         assert.equal(this.item.y, 10);
         assert.equal(this.item.segment.id, 20);
         assert.equal(this.item.segment.x, 100);
+    });
+
+    it("Should get other items in segment", function () {
+        var otherItem = this.item.getOtherItemsInSegment();
+        assert.equal(otherItem, this.item1);
     });
 });

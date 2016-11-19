@@ -10,7 +10,7 @@ export class Item extends EventEmitter{
         this.y = y || this.y;
         if(this.x < this.segment.x || this.x >= this.segment.xw || this.y < this.segment.y || this.y >= this.segment.yh){
             this.segment.update(this);
-            this.emit('update');
+            this.emit('segment change');
         }
 
     }

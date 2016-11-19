@@ -15,9 +15,15 @@ var item = grid.createItem(110, 110); // Returns Item
 // Update items position
 item.update(x, y) // Defaults to current x and y
 
-// Listen when items segment changes
+// Listen when items show up in segment
 item.segment.on('update', cb);
+
+// Listen to item changing segment
+item.on('segment change', cb);
 
 // Listen to all segment changes in grid
 grid.on('update', cb);
+
+// Get all other items in segment
+item.segment.getOtherItemsInSegment();
 ```
