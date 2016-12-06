@@ -21,7 +21,9 @@ var Item = (function (_super) {
             this.emit('segment change');
         }
     };
-    Item.prototype.getOtherItemsInSegment = function () {
+    Item.prototype.getOtherItemsInSegment = function (plain) {
+        if (plain)
+            return this.segment.getItemsExcept(this.id).map(function (v) { return v.plain(); });
         return this.segment.getItemsExcept(this.id);
     };
     Item.prototype.plain = function () {
