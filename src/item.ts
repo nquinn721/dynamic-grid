@@ -6,6 +6,11 @@ export class Item extends EventEmitter{
     constructor(public id, public x, public y) {super();}
 
     update (x, y){
+        if(typeof x === 'object'){
+            y = x.y;
+            x = x.x;
+        }
+
         this.x = x || this.x;
         this.y = y || this.y;
         if(this.x < this.segment.x || this.x >= this.segment.xw || this.y < this.segment.y || this.y >= this.segment.yh){
