@@ -29,7 +29,7 @@ var Segment = (function (_super) {
         return this.items.map(function (v) { return v.plain(); });
     };
     Segment.prototype.getItemsExcept = function (id) {
-        return this.items.map(function (v) { return v.plain(); }).filter(function (v) { return v.id != id; });
+        return this.items.filter(function (v) { return v.id != id; });
     };
     Segment.prototype.emitToAllItems = function (event, data) {
         this.items.forEach(function (v) { return v.emit(event, data); });
