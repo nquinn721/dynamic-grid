@@ -56,7 +56,8 @@ var Grid = (function (_super) {
             this.getSegmentToLeft(x, y),
             this.getSegmentAbove(x, y),
             this.getSegmentToRight(x, y),
-            this.getSegmentBelow(x, y)
+            this.getSegmentBelow(x, y),
+            this.getSegmentByXY(x, y)
         ];
     };
     Grid.prototype.update = function (item) {

@@ -53,7 +53,8 @@ export class Grid extends EventEmitter {
             this.getSegmentToLeft(x, y),
             this.getSegmentAbove(x, y),
             this.getSegmentToRight(x, y),
-            this.getSegmentBelow(x, y)
+            this.getSegmentBelow(x, y),
+            this.getSegmentByXY(x, y)
         ];
     }
 
