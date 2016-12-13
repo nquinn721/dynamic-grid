@@ -1,6 +1,9 @@
 import {EventEmitter} from 'events';
 import {Item} from './item';
 import {Segment} from './segment';
+const flatten = list => list.reduce(
+    (a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []
+);
 
 export class Grid extends EventEmitter {
     private segments = [];
@@ -49,11 +52,13 @@ export class Grid extends EventEmitter {
         return this.getSegmentByXY(x + this.gridSize.w, y);
     }
     getSurroundingSegments(x, y){
-        return [].concat(this.getSegmentToLeft(x, y))
-            .concat(this.getSegmentAbove(x, y))
-            .concat(this.getSegmentToRight(x, y))
-            .concat(this.getSegmentBelow(x, y))
-            .concat(this.getSegmentByXY(x, y)).filter(v => v);
+        return [
+            this.getSegmentToLeft(x, y),
+            this.getSegmentAbove(x, y),
+            this.getSegmentToRight(x, y),
+            this.getSegmentBelow(x, y),
+            this.getSegmentByXY(x, y)
+        ].filter(v => v);
     }
 
     update (item: Item){

@@ -5,6 +5,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var events_1 = require('events');
+var flatten = function (list) { return list.reduce(function (a, b) { return a.concat(Array.isArray(b) ? flatten(b) : b); }, []); };
 var Item = (function (_super) {
     __extends(Item, _super);
     function Item(grid, id, x, y) {
@@ -36,10 +37,10 @@ var Item = (function (_super) {
     Item.prototype.getItemsInSurroundingSegments = function (plain) {
         var segments = this.grid.getSurroundingSegments(this.x, this.y), self = this;
         if (plain) {
-            return segments.map(function (v) { return v && v.getItemsExcept(self.id).map(function (v) { return v.plain(); }); });
+            return flatten(segments.map(function (v) { return v && v.getItemsExcept(self.id).map(function (v) { return v.plain(); }); }));
         }
         else {
-            return segments.map(function (v) { return v && v.getItemsExcept(self.id); });
+            return flatten(segments.map(function (v) { return v && v.getItemsExcept(self.id); }));
         }
     };
     Item.prototype.plain = function () {

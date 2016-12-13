@@ -7,6 +7,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var events_1 = require('events');
 var item_1 = require('./item');
 var segment_1 = require('./segment');
+var flatten = function (list) { return list.reduce(function (a, b) { return a.concat(Array.isArray(b) ? flatten(b) : b); }, []); };
 var Grid = (function (_super) {
     __extends(Grid, _super);
     function Grid(w, h, gridSize) {
@@ -52,11 +53,13 @@ var Grid = (function (_super) {
         return this.getSegmentByXY(x + this.gridSize.w, y);
     };
     Grid.prototype.getSurroundingSegments = function (x, y) {
-        return [].concat(this.getSegmentToLeft(x, y))
-            .concat(this.getSegmentAbove(x, y))
-            .concat(this.getSegmentToRight(x, y))
-            .concat(this.getSegmentBelow(x, y))
-            .concat(this.getSegmentByXY(x, y)).filter(function (v) { return v; });
+        return [
+            this.getSegmentToLeft(x, y),
+            this.getSegmentAbove(x, y),
+            this.getSegmentToRight(x, y),
+            this.getSegmentBelow(x, y),
+            this.getSegmentByXY(x, y)
+        ].filter(function (v) { return v; });
     };
     Grid.prototype.update = function (item) {
         this.emit('before update');
