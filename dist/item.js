@@ -14,6 +14,10 @@ var Item = (function (_super) {
         this.y = y;
     }
     Item.prototype.update = function (x, y) {
+        if (typeof x === 'object') {
+            y = x.y;
+            x = x.x;
+        }
         this.x = x || this.x;
         this.y = y || this.y;
         if (this.segment)
@@ -22,7 +26,9 @@ var Item = (function (_super) {
                 this.emit('segment change');
             }
     };
-    Item.prototype.getOtherItemsInSegment = function () {
+    Item.prototype.getOtherItemsInSegment = function (plain) {
+        if (plain)
+            return this.segment.getItemsExcept(this.id).map(function (v) { return v.plain(); });
         if (this.segment)
             return this.segment.getItemsExcept(this.id);
     };

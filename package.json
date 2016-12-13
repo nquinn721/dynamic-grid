@@ -1,6 +1,10 @@
 {
   "name": "dynamicgrid",
+<<<<<<< HEAD
   "version": "0.1.12",
+=======
+  "version": "0.1.10",
+>>>>>>> 37a54368eacc6aa7aa3916581ec921346951f8d5
   "main": "dist/grid.js",
   "dependencies": {
     "express": "^4.14.0",

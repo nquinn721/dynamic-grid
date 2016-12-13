@@ -21,14 +21,22 @@ item.segment.on('update', cb);
 // Listen to item changing segment
 item.on('segment change', cb);
 
+// Get plain object to pass to client 
+item.plain()
+
 // Listen to all segment changes in grid
 grid.on('update', cb);
 
 // Get all other items in segment
+<<<<<<< HEAD
 item.segment.getOtherItemsInSegment();
 
 // Get plain object for item to send down to client
 item.plain();
 // With socket.io
 io.emit('item', item.plain());
+=======
+item.getOtherItemsInSegment('plain'); // Plain passes as param returns all of the other items plain object
+                                      // otherwise you get the full item
+>>>>>>> 37a54368eacc6aa7aa3916581ec921346951f8d5
 ```
