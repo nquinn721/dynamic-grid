@@ -6,14 +6,15 @@ export class Grid extends EventEmitter {
     private segments = [];
     private items = [];
 
-    init (w, h, gridSize) {
+    constructor (public w, public h, public gridSize) {
+        super();
         for (var i = 0; i < w; i += gridSize.w)
             for (var j = 0; j < h; j += gridSize.h)
                 this.createSegment(i, j, gridSize.w, gridSize.h, i + gridSize.w, j + gridSize.h);
     }
     createItem (x, y) {
         var segment = this.getSegmentByXY(x, y),
-            item = new Item(this.items.length, x, y);
+            item = new Item(this, this.items.length, x, y);
 
         item.segment = segment;
         this.items.push(item);
@@ -34,6 +35,26 @@ export class Grid extends EventEmitter {
                 return segment;
         }
 
+    }
+    getSegmentAbove (x, y){
+        return this.getSegmentByXY(x, y - this.gridSize.h);
+    }
+    getSegmentBelow (x, y){
+        return this.getSegmentByXY(x, y + this.gridSize.h);
+    }
+    getSegmentToLeft (x, y){
+        return this.getSegmentByXY(x - this.gridSize.w, y);
+    }
+    getSegmentToRight (x, y){
+        return this.getSegmentByXY(x + this.gridSize.w, y);
+    }
+    getSurroundingSegments(x, y){
+        return [
+            this.getSegmentToLeft(x, y),
+            this.getSegmentAbove(x, y),
+            this.getSegmentToRight(x, y),
+            this.getSegmentBelow(x, y)
+        ];
     }
 
     update (item: Item){

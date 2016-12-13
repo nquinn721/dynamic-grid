@@ -3,7 +3,7 @@ export class Item extends EventEmitter{
 
     public segment;
 
-    constructor(public id, public x, public y) {super();}
+    constructor(public grid, public id, public x, public y) {super();}
 
     update (x, y){
         if(typeof x === 'object'){
@@ -26,6 +26,14 @@ export class Item extends EventEmitter{
 
         if(this.segment)
             return this.segment.getItemsExcept(this.id);
+    }
+    getItemsInSurroundingSegments (plain){
+        var segments = this.grid.getSurroundingSegments(this.x, this.y);
+        if(plain){
+            return segments.map(v => v.getItemsExcept(this.id).map(v => v.plain()));
+        }else{
+            return segments.map(v => v.getItemsExcept(this.id));
+        }
     }
     plain(){
         return {

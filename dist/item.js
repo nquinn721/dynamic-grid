@@ -7,8 +7,9 @@ var __extends = (this && this.__extends) || function (d, b) {
 var events_1 = require('events');
 var Item = (function (_super) {
     __extends(Item, _super);
-    function Item(id, x, y) {
+    function Item(grid, id, x, y) {
         _super.call(this);
+        this.grid = grid;
         this.id = id;
         this.x = x;
         this.y = y;
@@ -31,6 +32,16 @@ var Item = (function (_super) {
             return this.segment.getItemsExcept(this.id).map(function (v) { return v.plain(); });
         if (this.segment)
             return this.segment.getItemsExcept(this.id);
+    };
+    Item.prototype.getItemsInSurroundingSegments = function (plain) {
+        var _this = this;
+        var segments = this.grid.getSurroundingSegments(this.x, this.y);
+        if (plain) {
+            return segments.map(function (v) { return v.getItemsExcept(_this.id).map(function (v) { return v.plain(); }); });
+        }
+        else {
+            return segments.map(function (v) { return v.getItemsExcept(_this.id); });
+        }
     };
     Item.prototype.plain = function () {
         return {

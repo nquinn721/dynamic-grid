@@ -9,18 +9,19 @@ var item_1 = require('./item');
 var segment_1 = require('./segment');
 var Grid = (function (_super) {
     __extends(Grid, _super);
-    function Grid() {
-        _super.apply(this, arguments);
+    function Grid(w, h, gridSize) {
+        _super.call(this);
+        this.w = w;
+        this.h = h;
+        this.gridSize = gridSize;
         this.segments = [];
         this.items = [];
-    }
-    Grid.prototype.init = function (w, h, gridSize) {
         for (var i = 0; i < w; i += gridSize.w)
             for (var j = 0; j < h; j += gridSize.h)
                 this.createSegment(i, j, gridSize.w, gridSize.h, i + gridSize.w, j + gridSize.h);
-    };
+    }
     Grid.prototype.createItem = function (x, y) {
-        var segment = this.getSegmentByXY(x, y), item = new item_1.Item(this.items.length, x, y);
+        var segment = this.getSegmentByXY(x, y), item = new item_1.Item(this, this.items.length, x, y);
         item.segment = segment;
         this.items.push(item);
         segment.items.push(item);
@@ -37,6 +38,26 @@ var Grid = (function (_super) {
             if (segment.x <= x && segment.xw > x && segment.y <= y && segment.yh > y)
                 return segment;
         }
+    };
+    Grid.prototype.getSegmentAbove = function (x, y) {
+        return this.getSegmentByXY(x, y - this.gridSize.h);
+    };
+    Grid.prototype.getSegmentBelow = function (x, y) {
+        return this.getSegmentByXY(x, y + this.gridSize.h);
+    };
+    Grid.prototype.getSegmentToLeft = function (x, y) {
+        return this.getSegmentByXY(x - this.gridSize.w, y);
+    };
+    Grid.prototype.getSegmentToRight = function (x, y) {
+        return this.getSegmentByXY(x + this.gridSize.w, y);
+    };
+    Grid.prototype.getSurroundingSegments = function (x, y) {
+        return [
+            this.getSegmentToLeft(x, y),
+            this.getSegmentAbove(x, y),
+            this.getSegmentToRight(x, y),
+            this.getSegmentBelow(x, y)
+        ];
     };
     Grid.prototype.update = function (item) {
         this.emit('before update');
