@@ -52,13 +52,12 @@ var Grid = (function (_super) {
         return this.getSegmentByXY(x + this.gridSize.w, y);
     };
     Grid.prototype.getSurroundingSegments = function (x, y) {
-        return [
-            this.getSegmentToLeft(x, y),
-            this.getSegmentAbove(x, y),
-            this.getSegmentToRight(x, y),
-            this.getSegmentBelow(x, y),
-            this.getSegmentByXY(x, y)
-        ];
+        return []
+            .concat(this.getSegmentToLeft(x, y))
+            .concat(this.getSegmentAbove(x, y))
+            .concat(this.getSegmentToRight(x, y))
+            .concat(this.getSegmentBelow(x, y))
+            .concat(this.getSegmentByXY(x, y));
     };
     Grid.prototype.update = function (item) {
         this.emit('before update');

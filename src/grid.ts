@@ -49,13 +49,12 @@ export class Grid extends EventEmitter {
         return this.getSegmentByXY(x + this.gridSize.w, y);
     }
     getSurroundingSegments(x, y){
-        return [
-            this.getSegmentToLeft(x, y),
-            this.getSegmentAbove(x, y),
-            this.getSegmentToRight(x, y),
-            this.getSegmentBelow(x, y),
-            this.getSegmentByXY(x, y)
-        ];
+        return []
+            .concat(this.getSegmentToLeft(x, y))
+            .concat(this.getSegmentAbove(x, y))
+            .concat(this.getSegmentToRight(x, y))
+            .concat(this.getSegmentBelow(x, y))
+            .concat(this.getSegmentByXY(x, y));
     }
 
     update (item: Item){
