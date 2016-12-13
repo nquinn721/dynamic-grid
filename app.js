@@ -19,8 +19,8 @@ app.get('/', function (req, res) {
 });
 
 var grid = new Grid(2000, 2000, {w: 100, h: 100});
-var player = grid.createItem(110, 110);
-var item = grid.createItem(115, 115);
+var player = grid.createItem(45, 45);
+var item = grid.createItem(50, 50);
 
 console.log(player.getItemsInSurroundingSegments(true));
 

@@ -40,11 +40,23 @@ var Grid = (function (_super) {
                 return segment;
         }
     };
+    Grid.prototype.getSegmentAboveLeft = function (x, y) {
+        return this.getSegmentByXY(x - this.gridSize.w, y - this.gridSize.h);
+    };
     Grid.prototype.getSegmentAbove = function (x, y) {
         return this.getSegmentByXY(x, y - this.gridSize.h);
     };
+    Grid.prototype.getSegmentAboveRight = function (x, y) {
+        return this.getSegmentByXY(x + this.gridSize.w, y - this.gridSize.h);
+    };
+    Grid.prototype.getSegmentBelowRight = function (x, y) {
+        return this.getSegmentByXY(x + this.gridSize.w, y + this.gridSize.h);
+    };
     Grid.prototype.getSegmentBelow = function (x, y) {
         return this.getSegmentByXY(x, y + this.gridSize.h);
+    };
+    Grid.prototype.getSegmentBelowLeft = function (x, y) {
+        return this.getSegmentByXY(x - this.gridSize.w, y + this.gridSize.h);
     };
     Grid.prototype.getSegmentToLeft = function (x, y) {
         return this.getSegmentByXY(x - this.gridSize.w, y);
@@ -56,6 +68,10 @@ var Grid = (function (_super) {
         return [
             this.getSegmentToLeft(x, y),
             this.getSegmentAbove(x, y),
+            this.getSegmentAboveLeft(x, y),
+            this.getSegmentAboveRight(x, y),
+            this.getSegmentBelowRight(x, y),
+            this.getSegmentBelowLeft(x, y),
             this.getSegmentToRight(x, y),
             this.getSegmentBelow(x, y),
             this.getSegmentByXY(x, y)

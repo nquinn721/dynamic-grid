@@ -39,11 +39,23 @@ export class Grid extends EventEmitter {
         }
 
     }
+    getSegmentAboveLeft(x, y){
+        return this.getSegmentByXY(x - this.gridSize.w, y - this.gridSize.h);
+    }
     getSegmentAbove (x, y){
         return this.getSegmentByXY(x, y - this.gridSize.h);
     }
+    getSegmentAboveRight(x, y){
+        return this.getSegmentByXY(x + this.gridSize.w, y - this.gridSize.h);
+    }
+    getSegmentBelowRight(x, y){
+        return this.getSegmentByXY(x + this.gridSize.w, y + this.gridSize.h);
+    }
     getSegmentBelow (x, y){
         return this.getSegmentByXY(x, y + this.gridSize.h);
+    }
+    getSegmentBelowLeft(x, y){
+        return this.getSegmentByXY(x - this.gridSize.w, y + this.gridSize.h);
     }
     getSegmentToLeft (x, y){
         return this.getSegmentByXY(x - this.gridSize.w, y);
@@ -55,6 +67,10 @@ export class Grid extends EventEmitter {
         return [
             this.getSegmentToLeft(x, y),
             this.getSegmentAbove(x, y),
+            this.getSegmentAboveLeft(x, y),
+            this.getSegmentAboveRight(x, y),
+            this.getSegmentBelowRight(x, y),
+            this.getSegmentBelowLeft(x, y),
             this.getSegmentToRight(x, y),
             this.getSegmentBelow(x, y),
             this.getSegmentByXY(x, y)
