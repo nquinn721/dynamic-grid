@@ -36,10 +36,10 @@ var Item = (function (_super) {
     Item.prototype.getItemsInSurroundingSegments = function (plain) {
         var segments = this.grid.getSurroundingSegments(this.x, this.y), self = this;
         if (plain) {
-            return segments.map(function (v) { return v.getItemsExcept(self.id).map(function (v) { return v.plain(); }); });
+            return segments.map(function (v) { return v && v.getItemsExcept(self.id).map(function (v) { return v.plain(); }); });
         }
         else {
-            return segments.map(function (v) { return v.getItemsExcept(self.id); });
+            return segments.map(function (v) { return v && v.getItemsExcept(self.id); });
         }
     };
     Item.prototype.plain = function () {

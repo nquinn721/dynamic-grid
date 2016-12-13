@@ -31,9 +31,9 @@ export class Item extends EventEmitter{
         var segments = this.grid.getSurroundingSegments(this.x, this.y),
             self = this;
         if(plain){
-            return segments.map(v => v.getItemsExcept(self.id).map(v => v.plain()));
+            return segments.map(v => v && v.getItemsExcept(self.id).map(v => v.plain()));
         }else{
-            return segments.map(v => v.getItemsExcept(self.id));
+            return segments.map(v => v && v.getItemsExcept(self.id));
         }
     }
     plain(){
