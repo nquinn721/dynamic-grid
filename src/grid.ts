@@ -38,10 +38,12 @@ export class Grid extends EventEmitter {
 
     update (item: Item){
         this.emit('before update');
-        var segment = this.getSegmentByXY(item.x, item.y)
+        var segment = this.getSegmentByXY(item.x, item.y);
+        if(!segment)return;
         segment.items.push(item);
         item.segment = segment;
-        item.segment.emit('update');
+        if(item.segment)
+            item.segment.emit('update');
         this.emit('update');
     }
 }

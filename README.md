@@ -26,4 +26,9 @@ grid.on('update', cb);
 
 // Get all other items in segment
 item.segment.getOtherItemsInSegment();
+
+// Get plain object for item to send down to client
+item.plain();
+// With socket.io
+io.emit('item', item.plain());
 ```

@@ -41,9 +41,12 @@ var Grid = (function (_super) {
     Grid.prototype.update = function (item) {
         this.emit('before update');
         var segment = this.getSegmentByXY(item.x, item.y);
+        if (!segment)
+            return;
         segment.items.push(item);
         item.segment = segment;
-        item.segment.emit('update');
+        if (item.segment)
+            item.segment.emit('update');
         this.emit('update');
     };
     return Grid;
