@@ -42,7 +42,7 @@ export class Item extends EventEmitter{
     destroy(){
         if(this.segment)
             this.segment.removeItem(this);
-        this.grid.destroyItem(this)
+        this.grid.destroyItem(this);
     }
     plain(){
         return {

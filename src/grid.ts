@@ -27,6 +27,7 @@ export class Grid extends EventEmitter {
     }
     destroyItem(item){
         this.items.splice(this.items.indexOf(item),1);
+        this.emit('destroyed item', item);
     }
     createSegment (x, y, w, h, xw, yh) {
         var segment = new Segment(this, this.segments.length, x, y, w, h, xw, yh);

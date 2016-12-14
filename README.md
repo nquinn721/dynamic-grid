@@ -19,7 +19,13 @@ item.segment.on('update', cb);
 item.on('segment change', cb);
 
 // Get plain object to pass to client 
-item.plain()
+item.plain();
+
+// Destroy item
+item.destroy();
+
+// Listen to destroyed items
+grid.on('destroyed item', cb); // Gets passed item
 
 // Listen to all segment changes in grid
 grid.on('update', cb);

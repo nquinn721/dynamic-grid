@@ -30,6 +30,7 @@ var Grid = (function (_super) {
     };
     Grid.prototype.destroyItem = function (item) {
         this.items.splice(this.items.indexOf(item), 1);
+        this.emit('destroyed item', item);
     };
     Grid.prototype.createSegment = function (x, y, w, h, xw, yh) {
         var segment = new segment_1.Segment(this, this.segments.length, x, y, w, h, xw, yh);
