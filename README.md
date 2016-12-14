@@ -24,6 +24,9 @@ item.plain();
 // Destroy item
 item.destroy();
 
+// Check if x and y are within range of item
+item.withinRange(x, y);
+
 // Listen to destroyed items
 grid.on('destroyed item', cb); // Gets passed item
 

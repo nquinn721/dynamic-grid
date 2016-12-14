@@ -81,6 +81,21 @@ var Grid = (function (_super) {
             this.getSegmentByXY(x, y)
         ].filter(function (v) { return v; });
     };
+    Grid.prototype.getSurroundingSegmentCoords = function (x, y) {
+        var segments = this.getSurroundingSegments(x, y);
+        var startX = 0, startY = 0, endX = 0, endY = 0;
+        for (var i = 0; i < segments.length; i++) {
+            if (segments[i].x < startX)
+                startX = segments[i].x;
+            if (segments[i].x + segments[i].w > endX)
+                endX = segments[i].x + segments[i].w;
+            if (segments[i].y < startY)
+                startY = segments[i].y;
+            if (segments[i].y + segments[i].h > endY)
+                endY = segments[i].y + segments[i].h;
+        }
+        return { x: startX, y: startY, w: x + endX, h: y + endY, endX: endX, endY: endY };
+    };
     Grid.prototype.update = function (item) {
         this.emit('before update');
         var segment = this.getSegmentByXY(item.x, item.y);

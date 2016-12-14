@@ -28,6 +28,11 @@ var Item = (function (_super) {
                 this.emit('segment change');
             }
     };
+    Item.prototype.withinRange = function (x, y) {
+        var coords = this.grid.getSurroundingSegmentCoords(this.x, this.y);
+        if (x > coords.x && x < coords.endX && y > coords.y && y < coords.endY)
+            return true;
+    };
     Item.prototype.getOtherItemsInSegment = function (plain) {
         if (plain)
             return this.segment.getItemsExcept(this.id).map(function (v) { return v.plain(); });

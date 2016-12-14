@@ -23,6 +23,10 @@ export class Item extends EventEmitter{
             }
 
     }
+    withinRange(x, y){
+        var coords = this.grid.getSurroundingSegmentCoords(this.x, this.y);
+        if(x > coords.x && x < coords.endX && y > coords.y && y < coords.endY)return true;
+    }
     getOtherItemsInSegment (plain){
         if(plain)
             return this.segment.getItemsExcept(this.id).map(v => v.plain());

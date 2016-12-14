@@ -22,7 +22,7 @@ var grid = new Grid(2000, 2000, {w: 100, h: 100});
 var player = grid.createItem(45, 45);
 var item = grid.createItem(50, 50);
 
-console.log(player.getItemsInSurroundingSegments(true));
+console.log(player.withinRange(0, 20));
 
 app.get('/', function (req, res) {
     res.sendfile(__dirname + '/index.html');
