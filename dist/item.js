@@ -43,6 +43,11 @@ var Item = (function (_super) {
             return flatten(segments.map(function (v) { return v && v.getItemsExcept(self.id); }));
         }
     };
+    Item.prototype.destroy = function () {
+        if (this.segment)
+            this.segment.removeItem(this);
+        this.grid.destroyItem(this);
+    };
     Item.prototype.plain = function () {
         return {
             x: this.x,

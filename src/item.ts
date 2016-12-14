@@ -39,6 +39,11 @@ export class Item extends EventEmitter{
             return flatten(segments.map(v => v && v.getItemsExcept(self.id)));
         }
     }
+    destroy(){
+        if(this.segment)
+            this.segment.removeItem(this);
+        this.grid.destroyItem(this)
+    }
     plain(){
         return {
             x : this.x,

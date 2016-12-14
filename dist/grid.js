@@ -28,6 +28,9 @@ var Grid = (function (_super) {
         segment.items.push(item);
         return item;
     };
+    Grid.prototype.destroyItem = function (item) {
+        this.items.splice(this.items.indexOf(item), 1);
+    };
     Grid.prototype.createSegment = function (x, y, w, h, xw, yh) {
         var segment = new segment_1.Segment(this, this.segments.length, x, y, w, h, xw, yh);
         this.segments.push(segment);

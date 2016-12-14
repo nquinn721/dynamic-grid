@@ -22,6 +22,9 @@ export class Segment extends EventEmitter{
         this.grid.update(item);
         this.emit('update');
     }
+    removeItem(item){
+        this.items.splice(this.items.indexOf(item),1);
+    }
     getAllItemsPlain (){
         return this.items.map(v => v.plain());
     }

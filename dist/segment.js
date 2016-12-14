@@ -25,6 +25,9 @@ var Segment = (function (_super) {
         this.grid.update(item);
         this.emit('update');
     };
+    Segment.prototype.removeItem = function (item) {
+        this.items.splice(this.items.indexOf(item), 1);
+    };
     Segment.prototype.getAllItemsPlain = function () {
         return this.items.map(function (v) { return v.plain(); });
     };
