@@ -22,12 +22,14 @@ export class Grid extends EventEmitter {
         item.segment = segment;
         this.items.push(item);
         segment.items.push(item);
-
+        this.emit('update', item);
+        segment.emit('update', item);
         return item;
     }
     destroyItem(item){
         this.items.splice(this.items.indexOf(item),1);
         this.emit('destroyed item', item);
+        this.emit('update', item);
     }
     createSegment (x, y, w, h, xw, yh) {
         var segment = new Segment(this, this.segments.length, x, y, w, h, xw, yh);
@@ -89,7 +91,10 @@ export class Grid extends EventEmitter {
             if(segments[i].y < startY)startY = segments[i].y;
             if(segments[i].y + segments[i].h > endY)endY = segments[i].y + segments[i].h;
         }
-        return {x : startX, y : startY, w : x + endX, h : y + endY, endX : endX, endY : endY};
+        return {x : startX
+
+
+            , y : startY, w : x + endX, h : y + endY, endX : endX, endY : endY};
     }
 
     update (item: Item){
@@ -99,8 +104,8 @@ export class Grid extends EventEmitter {
         segment.items.push(item);
         item.segment = segment;
         if(item.segment)
-            item.segment.emit('update');
-        this.emit('update');
+            item.segment.emit('update', item);
+        this.emit('update', item);
     }
 }
 module.exports = Grid;

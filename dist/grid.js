@@ -26,11 +26,14 @@ var Grid = (function (_super) {
         item.segment = segment;
         this.items.push(item);
         segment.items.push(item);
+        this.emit('update', item);
+        segment.emit('update', item);
         return item;
     };
     Grid.prototype.destroyItem = function (item) {
         this.items.splice(this.items.indexOf(item), 1);
         this.emit('destroyed item', item);
+        this.emit('update', item);
     };
     Grid.prototype.createSegment = function (x, y, w, h, xw, yh) {
         var segment = new segment_1.Segment(this, this.segments.length, x, y, w, h, xw, yh);
@@ -94,7 +97,8 @@ var Grid = (function (_super) {
             if (segments[i].y + segments[i].h > endY)
                 endY = segments[i].y + segments[i].h;
         }
-        return { x: startX, y: startY, w: x + endX, h: y + endY, endX: endX, endY: endY };
+        return { x: startX,
+            y: startY, w: x + endX, h: y + endY, endX: endX, endY: endY };
     };
     Grid.prototype.update = function (item) {
         this.emit('before update');
@@ -104,8 +108,8 @@ var Grid = (function (_super) {
         segment.items.push(item);
         item.segment = segment;
         if (item.segment)
-            item.segment.emit('update');
-        this.emit('update');
+            item.segment.emit('update', item);
+        this.emit('update', item);
     };
     return Grid;
 }(events_1.EventEmitter));

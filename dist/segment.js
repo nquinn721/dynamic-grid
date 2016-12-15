@@ -23,10 +23,11 @@ var Segment = (function (_super) {
         this.emit('before update');
         this.items.splice(this.items.indexOf(item), 1);
         this.grid.update(item);
-        this.emit('update');
+        this.emit('update', item);
     };
     Segment.prototype.removeItem = function (item) {
         this.items.splice(this.items.indexOf(item), 1);
+        this.emit('update');
     };
     Segment.prototype.getAllItemsPlain = function () {
         return this.items.map(function (v) { return v.plain(); });

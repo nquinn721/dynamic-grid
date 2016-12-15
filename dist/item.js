@@ -41,11 +41,17 @@ var Item = (function (_super) {
     };
     Item.prototype.getItemsInSurroundingSegments = function (plain) {
         var segments = this.grid.getSurroundingSegments(this.x, this.y), self = this;
+        this.segments = segments;
         if (plain) {
             return flatten(segments.map(function (v) { return v && v.getItemsExcept(self.id).map(function (v) { return v.plain(); }); }));
         }
         else {
             return flatten(segments.map(function (v) { return v && v.getItemsExcept(self.id); }));
+        }
+    };
+    Item.prototype.listenToSurroundingSegments = function (cb) {
+        for (var i = 0; i < this.segments.length; i++) {
+            this.segments[i].on('update', cb);
         }
     };
     Item.prototype.destroy = function () {

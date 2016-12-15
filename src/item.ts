@@ -5,6 +5,7 @@ const flatten = list => list.reduce(
 export class Item extends EventEmitter{
 
     public segment;
+    public segments;
 
     constructor(public grid, public id, public x, public y) {super();}
 
@@ -37,10 +38,16 @@ export class Item extends EventEmitter{
     getItemsInSurroundingSegments (plain){
         var segments = this.grid.getSurroundingSegments(this.x, this.y),
             self = this;
+        this.segments = segments;
         if(plain){
             return flatten(segments.map(v => v && v.getItemsExcept(self.id).map(v => v.plain())));
         }else{
             return flatten(segments.map(v => v && v.getItemsExcept(self.id)));
+        }
+    }
+    listenToSurroundingSegments (cb){
+        for(var i = 0; i < this.segments.length; i++){
+            this.segments[i].on('update', cb);
         }
     }
     destroy(){
