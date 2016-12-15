@@ -25,9 +25,8 @@ export class Grid extends EventEmitter {
         var item = new Item(this, segment, this.getSurroundingSegments(x, y), this.items.length, x, y);
 
         this.items.push(item);
-        segment.items.push(item);
+        segment.addItem(item);
         this.emit('update', item);
-        segment.emit('update', item);
         return item;
     }
     destroyItem(item: Item){
@@ -37,25 +36,19 @@ export class Grid extends EventEmitter {
     }
     moveSegment(item: Item){
         var newSegment = this.getSegmentByXY(item);
-        item.segment.removeItem(item);
-        item.segment = newSegment;
-        item.segment.addItem(item);
-    }
-    updateItemSegment (item: Item){
-        var segment = this.getSegmentByXY(item.x, item.y);
-        if(!segment)return;
-        segment.items.push(item);
-        item.segment = segment;
         if(item.segment)
-            item.segment.emit('update', item);
-        this.emit('update', item);
+            item.segment.removeItem(item);
+        if(newSegment)
+            item.segment = newSegment;
+        if(item.segment)
+            item.segment.addItem(item);
     }
     createSegment (x, y, w, h, xw, yh) {
         var segment = new Segment(this, this.segments.length, x, y, w, h, xw, yh);
         this.segments.push(segment);
     }
-    getSegmentByXY (x, y?) {
-        if(typeof x === 'object'){
+    getSegmentByXY (x, y?): Segment {
+        if(x instanceof Item){
             y = x.y;
             x = x.x;
         }
@@ -93,7 +86,11 @@ export class Grid extends EventEmitter {
     getSegmentToRight (x, y){
         return this.getSegmentByXY(x + this.gridSize.w, y);
     }
-    getSurroundingSegments(x, y){
+    getSurroundingSegments(x, y?): Array<Segment>{
+        if(x instanceof Item){
+            y = x.y;
+            x = x.x;
+        }
         return [
             this.getSegmentToLeft(x, y),
             this.getSegmentAbove(x, y),
@@ -115,10 +112,14 @@ export class Grid extends EventEmitter {
             if(segments[i].y < startY)startY = segments[i].y;
             if(segments[i].y + segments[i].h > endY)endY = segments[i].y + segments[i].h;
         }
-        return {x : startX
-
-
-            , y : startY, w : x + endX, h : y + endY, endX : endX, endY : endY};
+        return {
+            x : startX,
+            y : startY,
+            w : x + endX,
+            h : y + endY,
+            endX : endX,
+            endY : endY
+        };
     }
 
 

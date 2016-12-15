@@ -7,7 +7,9 @@ const flatten = list => list.reduce(
 );
 export class Item extends EventEmitter{
 
-    public segments;
+    private segmentGroupListenerCallback;
+    private isListeningToSegmentGroup;
+
 
     constructor(
         public grid: Grid,
@@ -30,9 +32,23 @@ export class Item extends EventEmitter{
             if(this.x < this.segment.x || this.x >= this.segment.xw || this.y < this.segment.y || this.y >= this.segment.yh){
                 this.grid.moveSegment(this);
                 this.emit('segment change');
+
+                if(this.isListeningToSegmentGroup) {
+                    this.clearSegmentGroupListeners();
+                    this.segmentGroup = this.grid.getSurroundingSegments(this);
+                    this.setupSegmentGroupListener();
+                }
+
+
             }
-        this.segment.moveItem(this);
+        if(this.segment)
+            this.segment.moveItem(this);
         this.emit('move');
+
+        if(!this.segment){
+            if(this.x >= 0 || this.x <=  this.grid.w || this.y >= 0 || this.y <=  this.grid.h)
+                this.segment = this.grid.getSegmentByXY(this);
+        }
     }
     withinRange(x, y){
         var coords = this.grid.getSurroundingSegmentCoords(this.x, this.y);
@@ -48,18 +64,30 @@ export class Item extends EventEmitter{
     getItemsInSurroundingSegments (plain){
         var segments = this.grid.getSurroundingSegments(this.x, this.y),
             self = this;
-        this.segments = segments;
         if(plain){
             return flatten(segments.map(v => v && v.getItemsExcept(self.id).map(v => v.plain())));
         }else{
             return flatten(segments.map(v => v && v.getItemsExcept(self.id)));
         }
     }
-    listenToSurroundingSegments (cb){
-        for(var i = 0; i < this.segments.length; i++){
-            this.segments[i].on('add item', cb.bind(cb.callee));
-            this.segments[i].on('remove item', cb.bind(cb.callee));
-            this.segments[i].on('move item', cb.bind(cb.callee));
+    listenToSegmentGroup (cb){
+        this.isListeningToSegmentGroup = true;
+        this.segmentGroupListenerCallback = cb;
+        this.setupSegmentGroupListener();
+    }
+    clearSegmentGroupListeners(){
+
+        for(var i = 0; i < this.segmentGroup.length; i++){
+            this.segmentGroup[i].removeListener('add item', this.segmentGroupListenerCallback);
+            this.segmentGroup[i].removeListener('remove item', this.segmentGroupListenerCallback);
+            this.segmentGroup[i].removeListener('move item', this.segmentGroupListenerCallback);
+        }
+    }
+    setupSegmentGroupListener(){
+        for(var i = 0; i < this.segmentGroup.length; i++){
+            this.segmentGroup[i].on('add item', this.segmentGroupListenerCallback);
+            this.segmentGroup[i].on('remove item', this.segmentGroupListenerCallback);
+            this.segmentGroup[i].on('move item', this.segmentGroupListenerCallback);
         }
     }
     destroy(){

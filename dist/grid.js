@@ -29,9 +29,8 @@ var Grid = (function (_super) {
         var segment = this.getSegmentByXY(x, y);
         var item = new item_1.Item(this, segment, this.getSurroundingSegments(x, y), this.items.length, x, y);
         this.items.push(item);
-        segment.items.push(item);
+        segment.addItem(item);
         this.emit('update', item);
-        segment.emit('update', item);
         return item;
     };
     Grid.prototype.destroyItem = function (item) {
@@ -41,26 +40,19 @@ var Grid = (function (_super) {
     };
     Grid.prototype.moveSegment = function (item) {
         var newSegment = this.getSegmentByXY(item);
-        item.segment.removeItem(item);
-        item.segment = newSegment;
-        item.segment.addItem(item);
-    };
-    Grid.prototype.updateItemSegment = function (item) {
-        var segment = this.getSegmentByXY(item.x, item.y);
-        if (!segment)
-            return;
-        segment.items.push(item);
-        item.segment = segment;
         if (item.segment)
-            item.segment.emit('update', item);
-        this.emit('update', item);
+            item.segment.removeItem(item);
+        if (newSegment)
+            item.segment = newSegment;
+        if (item.segment)
+            item.segment.addItem(item);
     };
     Grid.prototype.createSegment = function (x, y, w, h, xw, yh) {
         var segment = new segment_1.Segment(this, this.segments.length, x, y, w, h, xw, yh);
         this.segments.push(segment);
     };
     Grid.prototype.getSegmentByXY = function (x, y) {
-        if (typeof x === 'object') {
+        if (x instanceof item_1.Item) {
             y = x.y;
             x = x.x;
         }
@@ -96,6 +88,10 @@ var Grid = (function (_super) {
         return this.getSegmentByXY(x + this.gridSize.w, y);
     };
     Grid.prototype.getSurroundingSegments = function (x, y) {
+        if (x instanceof item_1.Item) {
+            y = x.y;
+            x = x.x;
+        }
         return [
             this.getSegmentToLeft(x, y),
             this.getSegmentAbove(x, y),
@@ -121,8 +117,14 @@ var Grid = (function (_super) {
             if (segments[i].y + segments[i].h > endY)
                 endY = segments[i].y + segments[i].h;
         }
-        return { x: startX,
-            y: startY, w: x + endX, h: y + endY, endX: endX, endY: endY };
+        return {
+            x: startX,
+            y: startY,
+            w: x + endX,
+            h: y + endY,
+            endX: endX,
+            endY: endY
+        };
     };
     return Grid;
 }(events_1.EventEmitter));

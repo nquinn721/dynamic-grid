@@ -21,8 +21,19 @@ app.get('/', function (req, res) {
 var grid = new Grid(2000, 2000, {w: 100, h: 100});
 var player = grid.createItem(45, 45);
 var item = grid.createItem(50, 50);
-
-console.log(player.withinRange(0, 20));
+setTimeout(function () {
+    player.x = 350;
+    player.update();
+}, 5000);
+player.listenToSegmentGroup(function (event, item) {
+    console.log(event, item.id, item.x);
+});
+var v = 5;
+setInterval(function () {
+    item.x += v;
+    if(item.x > 500 || item.x < 0)v *= -1;
+    item.update();
+}, 100);
 
 app.get('/', function (req, res) {
     res.sendfile(__dirname + '/index.html');
