@@ -24,6 +24,7 @@ var item = grid.createItem(50, 50);
 setInterval(function () {
     if(player.x < 500){
         player.x += 5;
+        player.y += 5;
         player.update();
 
     }
@@ -35,6 +36,7 @@ player.listenToSegmentGroup(function (event, item) {
 var v = 5;
 setInterval(function () {
     item.x += v;
+    item.y += v;
     if(item.x > 500 || item.x < 0)v *= -1;
     item.update();
 }, 100);
