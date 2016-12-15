@@ -55,7 +55,9 @@ var Item = (function (_super) {
     };
     Item.prototype.listenToSurroundingSegments = function (cb) {
         for (var i = 0; i < this.segments.length; i++) {
-            this.segments[i].on('update', cb);
+            this.segments[i].on('add item', cb.bind(cb.callee));
+            this.segments[i].on('remove item', cb.bind(cb.callee));
+            this.segments[i].on('move item', cb.bind(cb.callee));
         }
     };
     Item.prototype.destroy = function () {

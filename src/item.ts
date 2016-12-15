@@ -57,7 +57,9 @@ export class Item extends EventEmitter{
     }
     listenToSurroundingSegments (cb){
         for(var i = 0; i < this.segments.length; i++){
-            this.segments[i].on('update', cb);
+            this.segments[i].on('add item', cb.bind(cb.callee));
+            this.segments[i].on('remove item', cb.bind(cb.callee));
+            this.segments[i].on('move item', cb.bind(cb.callee));
         }
     }
     destroy(){

@@ -18,14 +18,14 @@ export class Segment extends EventEmitter{
 
     addItem (item: Item){
         this.items.push(item);
-        this.emit('add item', item);
+        this.emit('add item', 'add item', item);
     }
     removeItem(item: Item){
         this.items.splice(this.items.indexOf(item),1);
-        this.emit('remove item', item);
+        this.emit('remove item', 'remove item', item);
     }
     moveItem(item: Item){
-        this.emit('move item', item);
+        this.emit('move item', 'move item', item);
     }
     getAllItemsPlain (){
         return this.items.map(v => v.plain());
