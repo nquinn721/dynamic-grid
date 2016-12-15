@@ -21,12 +21,16 @@ app.get('/', function (req, res) {
 var grid = new Grid(2000, 2000, {w: 100, h: 100});
 var player = grid.createItem(45, 45);
 var item = grid.createItem(50, 50);
-setTimeout(function () {
-    player.x = 350;
-    player.update();
-}, 5000);
+setInterval(function () {
+    if(player.x < 500){
+        player.x += 5;
+        player.update();
+
+    }
+}, 100);
 player.listenToSegmentGroup(function (event, item) {
-    console.log(event, item.id, item.x);
+    if(item.id !== player.id)
+        console.log('x', item.x, ' player x ', player.x);
 });
 var v = 5;
 setInterval(function () {
