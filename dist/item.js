@@ -8,9 +8,11 @@ var events_1 = require('events');
 var flatten = function (list) { return list.reduce(function (a, b) { return a.concat(Array.isArray(b) ? flatten(b) : b); }, []); };
 var Item = (function (_super) {
     __extends(Item, _super);
-    function Item(grid, id, x, y) {
+    function Item(grid, segment, segmentGroup, id, x, y) {
         _super.call(this);
         this.grid = grid;
+        this.segment = segment;
+        this.segmentGroup = segmentGroup;
         this.id = id;
         this.x = x;
         this.y = y;
@@ -24,9 +26,11 @@ var Item = (function (_super) {
         this.y = y || this.y;
         if (this.segment)
             if (this.x < this.segment.x || this.x >= this.segment.xw || this.y < this.segment.y || this.y >= this.segment.yh) {
-                this.segment.update(this);
+                this.grid.moveSegment(this);
                 this.emit('segment change');
             }
+        this.segment.moveItem(this);
+        this.emit('move');
     };
     Item.prototype.withinRange = function (x, y) {
         var coords = this.grid.getSurroundingSegmentCoords(this.x, this.y);

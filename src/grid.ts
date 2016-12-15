@@ -15,27 +15,51 @@ export class Grid extends EventEmitter {
             for (var j = 0; j < h; j += gridSize.h)
                 this.createSegment(i, j, gridSize.w, gridSize.h, i + gridSize.w, j + gridSize.h);
     }
-    createItem (x, y) {
-        var segment = this.getSegmentByXY(x, y),
-            item = new Item(this, this.items.length, x, y);
+    createItem (x, y?): Item {
+        if(typeof x === 'object'){
+            y = x.y;
+            x = x.x;
+        }
 
-        item.segment = segment;
+        var segment = this.getSegmentByXY(x, y);
+        var item = new Item(this, segment, this.getSurroundingSegments(x, y), this.items.length, x, y);
+
         this.items.push(item);
         segment.items.push(item);
         this.emit('update', item);
         segment.emit('update', item);
         return item;
     }
-    destroyItem(item){
+    destroyItem(item: Item){
         this.items.splice(this.items.indexOf(item),1);
         this.emit('destroyed item', item);
+        this.emit('update', item);
+    }
+    moveSegment(item: Item){
+        var newSegment = this.getSegmentByXY(item);
+        item.segment.removeItem(item);
+        item.segment = newSegment;
+        item.segment.addItem(item);
+    }
+    updateItemSegment (item: Item){
+        var segment = this.getSegmentByXY(item.x, item.y);
+        if(!segment)return;
+        segment.items.push(item);
+        item.segment = segment;
+        if(item.segment)
+            item.segment.emit('update', item);
         this.emit('update', item);
     }
     createSegment (x, y, w, h, xw, yh) {
         var segment = new Segment(this, this.segments.length, x, y, w, h, xw, yh);
         this.segments.push(segment);
     }
-    getSegmentByXY (x, y) {
+    getSegmentByXY (x, y?) {
+        if(typeof x === 'object'){
+            y = x.y;
+            x = x.x;
+        }
+
         var segment;
         for (var i = 0; i < this.segments.length; i++) {
             segment = this.segments[i];
@@ -97,16 +121,7 @@ export class Grid extends EventEmitter {
             , y : startY, w : x + endX, h : y + endY, endX : endX, endY : endY};
     }
 
-    update (item: Item){
-        this.emit('before update');
-        var segment = this.getSegmentByXY(item.x, item.y);
-        if(!segment)return;
-        segment.items.push(item);
-        item.segment = segment;
-        if(item.segment)
-            item.segment.emit('update', item);
-        this.emit('update', item);
-    }
+
 }
 module.exports = Grid;
 

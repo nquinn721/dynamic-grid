@@ -22,8 +22,12 @@ var Grid = (function (_super) {
                 this.createSegment(i, j, gridSize.w, gridSize.h, i + gridSize.w, j + gridSize.h);
     }
     Grid.prototype.createItem = function (x, y) {
-        var segment = this.getSegmentByXY(x, y), item = new item_1.Item(this, this.items.length, x, y);
-        item.segment = segment;
+        if (typeof x === 'object') {
+            y = x.y;
+            x = x.x;
+        }
+        var segment = this.getSegmentByXY(x, y);
+        var item = new item_1.Item(this, segment, this.getSurroundingSegments(x, y), this.items.length, x, y);
         this.items.push(item);
         segment.items.push(item);
         this.emit('update', item);
@@ -35,11 +39,31 @@ var Grid = (function (_super) {
         this.emit('destroyed item', item);
         this.emit('update', item);
     };
+    Grid.prototype.moveSegment = function (item) {
+        var newSegment = this.getSegmentByXY(item);
+        item.segment.removeItem(item);
+        item.segment = newSegment;
+        item.segment.addItem(item);
+    };
+    Grid.prototype.updateItemSegment = function (item) {
+        var segment = this.getSegmentByXY(item.x, item.y);
+        if (!segment)
+            return;
+        segment.items.push(item);
+        item.segment = segment;
+        if (item.segment)
+            item.segment.emit('update', item);
+        this.emit('update', item);
+    };
     Grid.prototype.createSegment = function (x, y, w, h, xw, yh) {
         var segment = new segment_1.Segment(this, this.segments.length, x, y, w, h, xw, yh);
         this.segments.push(segment);
     };
     Grid.prototype.getSegmentByXY = function (x, y) {
+        if (typeof x === 'object') {
+            y = x.y;
+            x = x.x;
+        }
         var segment;
         for (var i = 0; i < this.segments.length; i++) {
             segment = this.segments[i];
@@ -99,17 +123,6 @@ var Grid = (function (_super) {
         }
         return { x: startX,
             y: startY, w: x + endX, h: y + endY, endX: endX, endY: endY };
-    };
-    Grid.prototype.update = function (item) {
-        this.emit('before update');
-        var segment = this.getSegmentByXY(item.x, item.y);
-        if (!segment)
-            return;
-        segment.items.push(item);
-        item.segment = segment;
-        if (item.segment)
-            item.segment.emit('update', item);
-        this.emit('update', item);
     };
     return Grid;
 }(events_1.EventEmitter));

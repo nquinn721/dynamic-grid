@@ -1,13 +1,22 @@
 import {EventEmitter} from 'events';
+import {Grid} from './grid';
+import {Segment} from './segment';
+
 const flatten = list => list.reduce(
     (a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []
 );
 export class Item extends EventEmitter{
 
-    public segment;
     public segments;
 
-    constructor(public grid, public id, public x, public y) {super();}
+    constructor(
+        public grid: Grid,
+        public segment: Segment,
+        public segmentGroup: Array<Segment>,
+        public id,
+        public x,
+        public y
+    ) {super();}
 
     update (x, y){
         if(typeof x === 'object'){
@@ -19,10 +28,11 @@ export class Item extends EventEmitter{
         this.y = y || this.y;
         if(this.segment)
             if(this.x < this.segment.x || this.x >= this.segment.xw || this.y < this.segment.y || this.y >= this.segment.yh){
-                this.segment.update(this);
+                this.grid.moveSegment(this);
                 this.emit('segment change');
             }
-
+        this.segment.moveItem(this);
+        this.emit('move');
     }
     withinRange(x, y){
         var coords = this.grid.getSurroundingSegmentCoords(this.x, this.y);
