@@ -19,11 +19,16 @@ var Segment = (function (_super) {
         this.yh = yh;
         this.items = [];
     }
-    Segment.prototype.update = function (item) {
-        this.emit('before update');
+    Segment.prototype.addItem = function (item) {
+        this.items.push(item);
+        this.emit('add item', 'add item', item, this);
+    };
+    Segment.prototype.removeItem = function (item) {
         this.items.splice(this.items.indexOf(item), 1);
-        this.grid.update(item);
-        this.emit('update');
+        this.emit('remove item', 'remove item', item, this);
+    };
+    Segment.prototype.moveItem = function (item) {
+        this.emit('move item', 'move item', item, this);
     };
     Segment.prototype.getAllItemsPlain = function () {
         return this.items.map(function (v) { return v.plain(); });

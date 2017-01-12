@@ -5,10 +5,7 @@ This is a dynamic grid for gaming.
 
 ```javascript
 var Grid = require('dynamicgrid');
-var grid = new Grid;
-
-// initialize grid 
-grid.init(w, h, segment); // Segment is {w : w, h : h}
+var grid = new Grid(w, h, segment); // Segment is {w : w, h : h}
 
 var item = grid.createItem(110, 110); // Returns Item
 
@@ -22,12 +19,30 @@ item.segment.on('update', cb);
 item.on('segment change', cb);
 
 // Get plain object to pass to client 
-item.plain()
+item.plain();
+
+// Destroy item
+item.destroy();
+
+// Check if x and y are within range of item
+item.withinRange(x, y);
+
+// Listen to segment group
+item.listenToSurroundingSegments(cb);
+
+// Listen to destroyed items
+grid.on('destroyed item', cb); // Gets passed item
 
 // Listen to all segment changes in grid
 grid.on('update', cb);
 
-// Get all other items in segment
-item.getOtherItemsInSegment('plain'); // Plain passes as param returns all of the other items plain object
+// With socket.io
+io.emit('item', item.plain());
+
+// Get all other items in segment 
+item.getOtherItemsInSegment(true); // True passes as param returns all of the other items plain object
                                       // otherwise you get the full item
+
+// Get items in surrounding segments
+item.getItemsInSurroundingSegments(true); // True gets items in plain object
 ```

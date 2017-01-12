@@ -6,7 +6,7 @@ export class Segment extends EventEmitter{
     public items = [];
 
     constructor(
-        public grid,
+        public grid: Grid,
         public id,
         public x,
         public y,
@@ -16,16 +16,21 @@ export class Segment extends EventEmitter{
         public yh
     ) {super();}
 
-    update (item: Item){
-        this.emit('before update');
-        this.items.splice(this.items.indexOf(item), 1);
-        this.grid.update(item);
-        this.emit('update');
+    addItem (item: Item){
+        this.items.push(item);
+        this.emit('add item', 'add item', item, this);
+    }
+    removeItem(item: Item){
+        this.items.splice(this.items.indexOf(item),1);
+        this.emit('remove item', 'remove item', item, this);
+    }
+    moveItem(item: Item){
+        this.emit('move item', 'move item', item, this);
     }
     getAllItemsPlain (){
         return this.items.map(v => v.plain());
     }
-    getItemsExcept (id){
+    getItemsExcept (id): Array<Item>{
         return this.items.filter(v => v.id != id);
     }
     emitToAllItems (event, data){
