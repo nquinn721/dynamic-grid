@@ -29,6 +29,7 @@ export class Item extends EventEmitter{
         this.x = x || this.x;
         this.y = y || this.y;
         if(this.segment)
+            // Change Segment
             if(this.x < this.segment.x || this.x >= this.segment.xw || this.y < this.segment.y || this.y >= this.segment.yh){
 
                 if(this.isListeningToSegmentGroup) {
@@ -39,8 +40,7 @@ export class Item extends EventEmitter{
                 }else{
                     this.grid.moveSegment(this);
                 }
-
-
+                this.emit('segment change');
             }
         if(this.segment)
             this.segment.moveItem(this);

@@ -28,7 +28,7 @@ item.destroy();
 item.withinRange(x, y);
 
 // Listen to segment group
-item.listenToSurroundingSegments(cb);
+item.listenToSegmentGroup(cb);
 
 // Listen to destroyed items
 grid.on('destroyed item', cb); // Gets passed item
